@@ -12,6 +12,8 @@ Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
 Vue.use(VueResource);
+Vue.http.options.emulateHTTP = true;
+Vue.http.options.emulateJSON = true;
 // Vue.use(VueAxios, axios);
 /* eslint-disable no-new */
 new Vue({

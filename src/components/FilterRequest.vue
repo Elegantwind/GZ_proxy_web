@@ -5,7 +5,6 @@
         <div>
           <el-row>
             <el-button type="primary" @click="addFormVisible = true">新增正则表达式</el-button>
-            <!--<el-button type="text" @click="addFormVisible = true">打开嵌套表单的 Dialog</el-button>-->
             <el-dialog title="添加新的正则表达式" :visible.sync="addFormVisible">
               <el-form :model="addform">
                 <el-form-item label="正则表达式" :label-width="formLabelWidth">
@@ -17,7 +16,7 @@
               </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="addFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addFormVisible = false">确 定</el-button>
+                <el-button type="primary" @click="addFilter()">确 定</el-button>
               </div>
             </el-dialog>
             <el-button type="success" @click="selectFormVisible = true">选择正则表达式</el-button>
@@ -29,10 +28,10 @@
               </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="selectFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="selectFormVisible = false">确 定</el-button>
+                <el-button type="primary" @click="selectFilter()">确 定</el-button>
               </div>
             </el-dialog>
-            <el-button type="danger" @click="selectFormVisible = true">删除正则表达式</el-button>
+            <el-button type="danger" @click="deleteFormVisible = true">删除正则表达式</el-button>
             <el-dialog title="删除正则表达式" :visible.sync="deleteFormVisible">
               <el-form :model="deleteform">
                 <el-form-item label="id" :label-width="formLabelWidth">
@@ -41,7 +40,15 @@
               </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="deleteFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteFormVisible = false">确 定</el-button>
+                <el-button type="primary" @click="deleteFilter()">确 定</el-button>
+              </div>
+            </el-dialog>
+            <el-button type="danger" @click="clearFormVisible = true">清空正则表达式</el-button>
+            <el-dialog title="清空正则表达式" :visible.sync="clearFormVisible">
+              <p>确认后会清空所有的过滤正则表达式</p>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="clearFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="clearFilter()">确 定</el-button>
               </div>
             </el-dialog>
           </el-row>
@@ -69,19 +76,6 @@
               width="width: 25%">
               <template slot-scope="scope">
                 <span style="margin-left: 10px">{{ scope.row.describe}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作">
-              <template slot-scope="scope">
-                <el-button
-                  size="mini"
-                  @click="handleEdit(scope.$index, scope.row)">编辑
-                </el-button>
-                <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleDelete(scope.$index, scope.row)">删除
-                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -127,91 +121,96 @@
   </div>
 </template>
 <script>
+import {ShowAllFilter, FilterAdd, FilterDelete, FilterClear, FilterSelect} from './../api/api'
+
 export default {
   data() {
     return {
-      tableDataRegular: [{
-        regular: '~a',
-        meaning: '匹配资产以响应：CSS，Javascript，Flash，图像。',
-      }, {
-        regular: '~b regex',
-        meaning: 'Body',
-      }, {
-        regular: '~bq regex',
-        meaning: 'Request body',
-      }, {
-        regular: '~bs regex',
-        meaning: 'Response body',
-      }, {
-        regular: '~c int',
-        meaning: 'HTTP response code',
-      }, {
-        regular: '~d regex',
-        meaning: '域',
-      }, {
-        regular: 'dst regex',
-        meaning: '匹配目标地址',
-      }, {
-        regular: '~e',
-        meaning: '匹配错误',
-      }, {
-        regular: '~h regex',
-        meaning: 'Header',
-      }, {
-        regular: '~hq regex',
-        meaning: 'Request header',
-      }, {
-        regular: '~hs regex',
-        meaning: 'Response header',
-      }, {
-        regular: '~http',
-        meaning: '匹配HTTP流',
-      }, {
-        regular: '~m regex',
-        meaning: '匹配方法',
-      }, {
-        regular: '~marked',
-        meaning: '匹配标记的流量',
-      }, {
-        regular: '~q',
-        meaning: '匹配没有相应的请求',
-      }, {
-        regular: '~s',
-        meaning: '匹配相应',
-      }, {
-        regular: '~src regex',
-        meaning: '匹配源地址',
-      }, {
-        regular: '~t regex',
-        meaning: 'Content-type header',
-      }, {
-        regular: '~tcp',
-        meaning: 'Match TCP flows',
-      }, {
-        regular: '~tq regex',
-        meaning: 'Request Content-Type header',
-      }, {
-        regular: '~ts regex',
-        meaning: 'Response Content-Type header',
-      }, {
-        regular: '~u regex',
-        meaning: '匹配URL',
-      }, {
-        regular: '~websocket',
-        meaning: 'Match WebSocket flows',
-      }, {
-        regular: '!',
-        meaning: 'not',
-      }, {
-        regular: '&',
-        meaning: 'and',
-      }, {
-        regular: '|',
-        meaning: 'or',
-      }, {
-        regular: '(...)',
-        meaning: 'grouping',
-      }]
+      tableData: [],
+      tableDataRegular: [
+
+        {
+          regular: '~a',
+          meaning: '匹配资产以响应：CSS，Javascript，Flash，图像。',
+        }, {
+          regular: '~b regex',
+          meaning: 'Body',
+        }, {
+          regular: '~bq regex',
+          meaning: 'Request body',
+        }, {
+          regular: '~bs regex',
+          meaning: 'Response body',
+        }, {
+          regular: '~c int',
+          meaning: 'HTTP response code',
+        }, {
+          regular: '~d regex',
+          meaning: '域',
+        }, {
+          regular: 'dst regex',
+          meaning: '匹配目标地址',
+        }, {
+          regular: '~e',
+          meaning: '匹配错误',
+        }, {
+          regular: '~h regex',
+          meaning: 'Header',
+        }, {
+          regular: '~hq regex',
+          meaning: 'Request header',
+        }, {
+          regular: '~hs regex',
+          meaning: 'Response header',
+        }, {
+          regular: '~http',
+          meaning: '匹配HTTP流',
+        }, {
+          regular: '~m regex',
+          meaning: '匹配方法',
+        }, {
+          regular: '~marked',
+          meaning: '匹配标记的流量',
+        }, {
+          regular: '~q',
+          meaning: '匹配没有相应的请求',
+        }, {
+          regular: '~s',
+          meaning: '匹配相应',
+        }, {
+          regular: '~src regex',
+          meaning: '匹配源地址',
+        }, {
+          regular: '~t regex',
+          meaning: 'Content-type header',
+        }, {
+          regular: '~tcp',
+          meaning: 'Match TCP flows',
+        }, {
+          regular: '~tq regex',
+          meaning: 'Request Content-Type header',
+        }, {
+          regular: '~ts regex',
+          meaning: 'Response Content-Type header',
+        }, {
+          regular: '~u regex',
+          meaning: '匹配URL',
+        }, {
+          regular: '~websocket',
+          meaning: 'Match WebSocket flows',
+        }, {
+          regular: '!',
+          meaning: 'not',
+        }, {
+          regular: '&',
+          meaning: 'and',
+        }, {
+          regular: '|',
+          meaning: 'or',
+        }, {
+          regular: '(...)',
+          meaning: 'grouping',
+        }]
       , tableDataRegularExamples: [
         {
           examples: '包含“google.com”的网址',
@@ -240,8 +239,111 @@ export default {
       deleteform: {
         id: '',
       },
+      clearFormVisible: false,
       formLabelWidth: '120px'
     };
   },
+  created() {
+    this.showAllFilter()
+  },
+  mounted() {
+    window.setInterval(() => {
+      this.showAllFilter()
+    }, 2000)
+  },
+  complete() {
+  },
+  methods: {
+    showAllFilter() {
+      this.$http.get(ShowAllFilter)
+        .then(res => {
+          console.log(res)
+          return res.json()
+        })
+        .then(data => {
+            console.log(data.data)
+            this.tableData = data.data
+          }
+        )
+    },
+    addFilter() {
+      this.$http.post(FilterAdd, this.addform)
+        .then(res => {
+          return res.json()
+        })
+        .then(data => {
+          if (data.code == 'error') {
+            this.$message({
+              showClose: true,
+              message: '接口有错误，上传失败！'
+            })
+            ;
+          }
+          else {
+            this.addFormVisible = false;
+          }
+        })
+    },
+    deleteFilter() {
+      this.$http.post(FilterDelete, this.deleteform)
+        .then(res => {
+          console.log(FilterDelete)
+          console.log(res)
+          return res.json()
+        })
+        .then(data => {
+          if (data.code == 'error') {
+            this.$message({
+              showClose: true,
+              message: '接口有错误，上传失败！'
+            })
+            ;
+          }
+          else {
+            this.deleteFormVisible = false;
+          }
+        })
+    },
+    selectFilter() {
+      this.$http.post(FilterSelect, this.selectform)
+        .then(res => {
+          console.log(FilterDelete)
+          console.log(res)
+          return res.json()
+        })
+        .then(data => {
+          if (data.code == 'error') {
+            this.$message({
+              showClose: true,
+              message: '接口有错误，上传失败！'
+            })
+            ;
+          }
+          else {
+            this.selectFormVisible = false;
+          }
+        })
+    },
+    clearFilter() {
+      this.$http.get(FilterClear)
+        .then(res => {
+          console.log(FilterClear)
+          console.log(res)
+          return res.json()
+        })
+        .then(data => {
+          if (data.code != 'ok') {
+            this.$message({
+              showClose: true,
+              message: '接口错误清理失败'
+            })
+            ;
+          }
+          else {
+            this.clearFormVisible = false;
+          }
+        })
+    },
+  }
 }
 </script>

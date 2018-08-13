@@ -3,7 +3,7 @@ module.exports = [{
   id: 'basic',
   sub: [
     {
-      name: '接口请求过滤',
+      name: '接口请求过滤设置',
       componentName: 'FilterRequest'
     },
     {
