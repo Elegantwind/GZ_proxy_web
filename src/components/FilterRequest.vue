@@ -31,6 +31,14 @@
                 <el-button type="primary" @click="selectFilter()">确 定</el-button>
               </div>
             </el-dialog>
+            <el-button type="danger" @click="cancelFormVisible = true">取消正则表达式</el-button>
+            <el-dialog title="取消正则表达式" :visible.sync="cancelFormVisible">
+              <p>点击确认后会取消正则表达式</p>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="cancelFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="cancelFilter()">确 定</el-button>
+              </div>
+            </el-dialog>
             <el-button type="danger" @click="deleteFormVisible = true">删除正则表达式</el-button>
             <el-dialog title="删除正则表达式" :visible.sync="deleteFormVisible">
               <el-form :model="deleteform">
@@ -121,7 +129,7 @@
   </div>
 </template>
 <script>
-import {ShowAllFilter, FilterAdd, FilterDelete, FilterClear, FilterSelect} from './../api/api'
+import {ShowAllFilter, FilterAdd, FilterDelete, FilterClear, FilterSelect, FilterCancel} from './../api/api'
 import {TableDataRegular, TableDataRegularExamples} from './../api/filter-config'
 
 export default {
@@ -147,6 +155,7 @@ export default {
         id: '',
       },
       clearFormVisible: false,
+      cancelFormVisible: false,
       formLabelWidth: '120px'
     };
   },
@@ -248,6 +257,25 @@ export default {
           }
           else {
             this.clearFormVisible = false;
+          }
+        })
+    },
+    cancelFilter() {
+      this.$http.get(FilterCancel)
+        .then(res => {
+          console.log(res)
+          return res.json()
+        })
+        .then(data => {
+          if (data.code != 'ok') {
+            this.$message({
+              showClose: true,
+              message: '接口错误清理失败'
+            })
+            ;
+          }
+          else {
+            this.cancelFormVisible = false;
           }
         })
     },

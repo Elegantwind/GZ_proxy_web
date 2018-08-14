@@ -36,7 +36,13 @@ export default {
         })
         .then(data => {
             console.log(data.data)
-            this.usingFilter = data.data
+            if (data.data === null) {
+              this.usingFilter = {'match': '无'}
+            }
+            else {
+              this.usingFilter = data.data
+            }
+
           }
         )
     },
