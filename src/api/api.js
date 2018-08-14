@@ -1,4 +1,6 @@
 export let AllRequest = "http://0.0.0.0:8888/realtime/show_all_request";
+export let ClearRequest = "http://0.0.0.0:8888/realtime/clear_all_request";
+export let StartProxy = "http://0.0.0.0:8888/run_proxy";
 export let RequestRedirect = "http://0.0.0.0:8888/redirect/RequestRedirect";
 export let ReponseRedirect = "http://0.0.0.0:8888/redirect/ResponseRedirect";
 export let ShowAllFilter = "http://0.0.0.0:8888/realtime/show_all_filter";
