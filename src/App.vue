@@ -1,16 +1,19 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header class="header">
-        <vheader/>
-      </el-header>
+      <el-aside width="200px">
+        <navmenu></navmenu>
+      </el-aside>
       <el-container>
-        <el-aside width="200px">
-          <navmenu></navmenu>
-        </el-aside>
-        <el-main>
+        <el-header class="header">
+          <vheader></vheader>
+        </el-header>
+        <el-main class="main">
           <router-view></router-view>
         </el-main>
+        <el-footer class="footer">
+          <vfooter></vfooter>
+        </el-footer>
       </el-container>
     </el-container>
   </div>
@@ -18,12 +21,14 @@
 <script>
 import NavMenu from '@/components/NavMenu'
 import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 export default {
   name: 'app',
   components: {
     'navmenu': NavMenu,
-    'vheader': Header
+    'vheader': Header,
+    'vfooter': Footer
   }
 }
 
@@ -32,6 +37,12 @@ export default {
 <style>
   .header {
     background-color: #409EFF;
+    color: #fff;
+    line-height: 60px;
+  }
+
+  .footer {
+    /*background-color: #409EFF;*/
     color: #fff;
     line-height: 60px;
   }

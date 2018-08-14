@@ -6,3 +6,4 @@ export let FilterAdd = "http://0.0.0.0:8888/realtime/add_filter";
 export let FilterDelete = "http://0.0.0.0:8888/realtime/delete_filter";
 export let FilterClear = "http://0.0.0.0:8888/realtime/clear_filter";
 export let FilterSelect = "http://0.0.0.0:8888/realtime/select_filter";
+export let FilterUsing = "http://0.0.0.0:8888/realtime/using_filter";
