@@ -158,7 +158,7 @@ export default {
     window.setInterval(() => {
 //      this.Get()
       this.firstGet()
-    }, 5000)
+    }, 1000)
   }
 };
 </script>
