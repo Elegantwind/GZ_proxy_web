@@ -8,7 +8,7 @@
             <el-dialog title="添加新的正则表达式" :visible.sync="addFormVisible">
               <el-form :model="addform">
                 <el-form-item label="正则表达式" :label-width="formLabelWidth">
-                  <el-input v-model="addform.match" auto-complete="off"></el-input>
+                  <el-input v-model="addform.match" auto-complete="off" type="text"></el-input>
                 </el-form-item>
                 <el-form-item label="描述" :label-width="formLabelWidth">
                   <el-input v-model="addform.describe" auto-complete="off"></el-input>
@@ -133,6 +133,7 @@ import {ShowAllFilter, FilterAdd, FilterDelete, FilterClear, FilterSelect, Filte
 import {TableDataRegular, TableDataRegularExamples} from './../api/filter-config'
 
 export default {
+//  var addform = new FormData;
   data() {
     return {
       tableData: [],
@@ -141,8 +142,8 @@ export default {
 //      添加部分
       addFormVisible: false,
       addform: {
-        match: '',
-        describe: '',
+        match: "",
+        describe: "",
       },
 //      选择部分
       selectFormVisible: false,

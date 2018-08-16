@@ -120,7 +120,7 @@ export default {
           if (data.code == 'error') {
             this.$message({
               showClose: true,
-              message: '接口有错误，上传失败！'
+              message: '接口有错误，清理失败！'
             })
           } else {
             this.clearRequestPage = false
