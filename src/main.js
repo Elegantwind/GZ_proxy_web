@@ -14,6 +14,8 @@ Vue.use(ElementUI);
 Vue.use(VueResource);
 Vue.http.options.emulateHTTP = true;
 Vue.http.options.emulateJSON = true;
+Vue.http.headers.post['Content-Type'] = "multipart/form-data";
+// Vue.http.
 // Vue.use(VueAxios, axios);
 /* eslint-disable no-new */
 new Vue({

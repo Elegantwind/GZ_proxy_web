@@ -1,29 +1,25 @@
 module.exports = [{
-  name: '基础',
-  id: 'basic',
+  name: '请求',
+  id: 'Request',
   sub: [
     {
       name: '接口请求过滤设置',
       componentName: 'FilterRequest'
     },
     {
-      name: '接口值',
+      name: '请求内容',
       componentName: 'RealTimeRequest'
-    }, {
-      name: 'Request',
-      componentName: 'RedirectRequest'
-    }, {
-      name: 'Response',
-      componentName: 'RedirectResponse'
     }]
 }, {
-  name: 'Form',
-  id: 'form',
+  name: '功能',
+  id: 'Redirect',
   sub: [{
-    name: 'Radio 单选框',
-    componentName: 'FormRadio'
-  }, {
-    name: 'Checkbox 多选框',
-    componentName: 'FormCheckbox'
-  }]
+    name: '替换',
+    componentName: 'Redirect'
+  }
+  // , {
+  //   name: 'Response',
+  //   componentName: 'RedirectResponse'
+  // }
+  ]
 }]
