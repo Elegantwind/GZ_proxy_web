@@ -19,7 +19,7 @@ export let TableDataRegular = [
     regular: '~d regex',
     meaning: '域',
   }, {
-    regular: 'dst regex',
+    regular: '~dst regex',
     meaning: '匹配目标地址',
   }, {
     regular: '~e',
