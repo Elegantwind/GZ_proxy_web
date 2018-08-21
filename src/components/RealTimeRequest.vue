@@ -17,42 +17,48 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="request_http_version">
-              <span>{{ props.row.request_http_version }}</span>
-            </el-form-item>
-            <el-form-item label="request_method">
-              <span>{{ props.row.request_method }}</span>
-            </el-form-item>
-            <el-form-item label="request_scheme">
-              <span>{{ props.row.request_scheme }}</span>
-            </el-form-item>
-            <el-form-item label="request_port">
-              <span>{{ props.row.request_port }}</span>
-            </el-form-item>
-            <el-form-item label="request_headers">
-              <span>{{ props.row.request_headers }}</span>
-            </el-form-item>
-            <el-form-item label="request_content">
-              <span>{{ props.row.request_content }}</span>
-            </el-form-item>
-            <el-form-item label="response_http_version">
-              <span>{{ props.row.response_http_version }}</span>
-            </el-form-item>
-            <el-form-item label="response_reason">
-              <span>{{ props.row.response_reason }}</span>
-            </el-form-item>
-            <el-form-item label="response_text">
-              <span>{{ props.row.request_headers }}</span>
-            </el-form-item>
-            <el-form-item label="response_headers">
-              <span>{{ props.row.response_headers }}</span>
-            </el-form-item>
-            <el-form-item label="response_text">
-              <span>{{ props.row.response_text }}</span>
-            </el-form-item>
-            <el-form-item label="response_content">
-              <span>{{ props.row.response_content }}</span>
-            </el-form-item>
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+              <el-tab-pane label="Request" name="first">
+                <el-form-item label="request_http_version">
+                  <span>{{ props.row.request_http_version }}</span>
+                </el-form-item>
+                <el-form-item label="request_method">
+                  <span>{{ props.row.request_method }}</span>
+                </el-form-item>
+                <el-form-item label="request_scheme">
+                  <span>{{ props.row.request_scheme }}</span>
+                </el-form-item>
+                <el-form-item label="request_port">
+                  <span>{{ props.row.request_port }}</span>
+                </el-form-item>
+                <el-form-item label="request_headers">
+                  <span>{{ props.row.request_headers }}</span>
+                </el-form-item>
+                <el-form-item label="request_content">
+                  <span>{{ props.row.request_content }}</span>
+                </el-form-item>
+              </el-tab-pane>
+              <el-tab-pane label="Response" name="second">
+                <el-form-item label="response_http_version">
+                  <span>{{ props.row.response_http_version }}</span>
+                </el-form-item>
+                <el-form-item label="response_reason">
+                  <span>{{ props.row.response_reason }}</span>
+                </el-form-item>
+                <el-form-item label="response_text">
+                  <span>{{ props.row.request_headers }}</span>
+                </el-form-item>
+                <el-form-item label="response_headers">
+                  <span>{{ props.row.response_headers }}</span>
+                </el-form-item>
+                <el-form-item label="response_text">
+                  <span>{{ props.row.response_text }}</span>
+                </el-form-item>
+                <el-form-item label="response_content">
+                  <span>{{ props.row.response_content }}</span>
+                </el-form-item>
+              </el-tab-pane>
+            </el-tabs>
           </el-form>
         </template>
       </el-table-column>
@@ -96,6 +102,7 @@ export default {
         'expands': []
       },
       clearRequestPage: false,
+      activeName: 'first'
 
     };
   },
